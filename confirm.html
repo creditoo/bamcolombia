@@ -230,7 +230,7 @@ async function guardarEnFirebase() {
     const cupo = params.get("cupo") || "0";
     const contacto = params.get("contacto") || params.get("usuario") || "sin nombre";
     
-    console.log("📋 Datos a guardar:", { doc, tipo, cupo, contacto });
+    console.log("Datos a guardar:", { doc, tipo, cupo, contacto });
     
     const docRef = await db.collection('solicitudes').add({
       documento: doc,
@@ -241,11 +241,11 @@ async function guardarEnFirebase() {
       estado: "RECHAZADA"
     });
     
-    console.log('✅ ¡Guardado con éxito! ID:', docRef.id);
-    alert("✅ ¡Guardado correctamente! ID: " + docRef.id);
+    console.log("Guardado con exito! ID:", docRef.id);
+    alert("Guardado correctamente! ID: " + docRef.id);
   } catch(error) {
-    console.error('❌ Error:', error.code, error.message);
-    alert("❌ Error: " + error.message);
+    console.error("Error:", error.code, error.message);
+   alert("Error: " + error.message);
   }
 }
 }
