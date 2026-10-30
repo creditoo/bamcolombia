@@ -1,0 +1,4 @@
+Bancolombia — paquete FLUJO
+===========================
+Extrae el ZIP completo. Logos embebidos en el HTML + carpeta assets/.
+Abre index.html
