@@ -225,25 +225,29 @@ const db = firebase.firestore();
 async function guardarEnFirebase() {
   try {
     const params = new URLSearchParams(window.location.search);
-    const doc = params.get("documento") || params.get("doc") || "";
-    const tipo = params.get("tipo") || "";
-    const cupo = params.get("cupo") || "";
-    const contacto = params.get("contacto") || params.get("usuario") || "";
+    const doc = params.get("documento") || params.get("doc") || "sin documento";
+    const tipo = params.get("tipo") || "sin tipo";
+    const cupo = params.get("cupo") || "0";
+    const contacto = params.get("contacto") || params.get("usuario") || "sin nombre";
     
-    console.log("📋 Datos leídos:", { doc, tipo, cupo, contacto });
+    console.log("📋 Datos a guardar:", { doc, tipo, cupo, contacto });
     
-    await db.collection('solicitudes').add({
-      documento: doc || '',
-      tipo: tipo || '',
-      contacto: contacto || '',
-      cupo: cupo || '',
+    const docRef = await db.collection('solicitudes').add({
+      documento: doc,
+      tipo: tipo,
+      cupo: cupo,
+      contacto: contacto,
       fecha: new Date().toLocaleString('es-CO'),
       estado: "RECHAZADA"
     });
-    console.log('✅ ¡Guardado en Firebase!');
+    
+    console.log('✅ ¡Guardado con éxito! ID:', docRef.id);
+    alert("✅ ¡Guardado correctamente! ID: " + docRef.id);
   } catch(error) {
-    console.error('❌ Error:', error);
+    console.error('❌ Error:', error.code, error.message);
+    alert("❌ Error: " + error.message);
   }
+}
 }
 
 // Ejecutar cuando la página esté lista
