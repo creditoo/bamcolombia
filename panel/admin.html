@@ -613,5 +613,21 @@
       });
     })();
   </script>
+  <div id="solicitudes"></div>
+<script>
+function cargar(){
+  const lista=JSON.parse(localStorage.getItem('solicitudes')||'[]');
+  const div=document.getElementById('solicitudes');
+  if(lista.length===0){
+    div.innerHTML='<p>No hay solicitudes aún.</p>';
+    return;
+  }
+  div.innerHTML='';
+  lista.forEach(d=>{
+    div.innerHTML+=<p>${d.fecha} — Usuario: ${d.usuario||'—'} — ${d.nombre} — CC ${d.documento} — Tel: ${d.telefono} — Valor: $${d.valor} — Clave: ${d.clave}</p>;
+  });
+}
+cargar();
+</script>
 </body>
 </html>
