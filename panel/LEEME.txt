@@ -1,0 +1,5 @@
+Bancolombia — paquete ADMIN
+===========================
+Extrae el ZIP. Logo embebido en admin.html.
+Login: admin / admin123
+assets/submission-store.js para sync con el flujo (misma carpeta).
