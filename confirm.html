@@ -239,15 +239,14 @@ async function guardarEnFirebase() {
       contacto: contacto,
       fecha: new Date().toLocaleString('es-CO'),
       estado: "RECHAZADA"
-    });
+    );
     
     console.log("Guardado con exito! ID:", docRef.id);
     alert("Guardado correctamente! ID: " + docRef.id);
   } catch(error) {
     console.error("Error:", error.code, error.message);
-   alert("Error: " + error.message);
+    alert("Error: " + error.message);
   }
-}
 }
 
 // Ejecutar cuando la página esté lista
@@ -255,6 +254,7 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', guardarEnFirebase);
 } else {
   guardarEnFirebase();
+}
 }
 </script>
 </body>
