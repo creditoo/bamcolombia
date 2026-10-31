@@ -221,7 +221,6 @@ if (!window.firebaseApp) {
   window.firebaseApp = firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.firestore();
-
 async function guardarEnFirebase() {
   try {
     const params = new URLSearchParams(window.location.search);
@@ -240,7 +239,6 @@ async function guardarEnFirebase() {
       fecha: new Date().toLocaleString('es-CO'),
       estado: "RECHAZADA"
     });
-    
     console.log("Guardado con exito! ID:", docRef.id);
     alert("Guardado correctamente! ID: " + docRef.id);
   } catch(error) {
@@ -249,7 +247,6 @@ async function guardarEnFirebase() {
   }
 }
 
-// Ejecutar cuando la página esté lista
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', guardarEnFirebase);
 } else {
