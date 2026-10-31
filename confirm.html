@@ -11,11 +11,15 @@ async function guardarSolicitud(datos) {
     const leerRespuesta = await fetch(BIN_URL, {
       headers: { "X-Access-Key": API_KEY }
     });
-    const datosActuales = await leerRespuesta.json();
-    
-    if (!datosActuales.record.solicitudes) {
-      datosActuales.record.solicitudes = [];
-    }
+  const datosActuales = await leerRespuesta.json();
+
+// Verificamos que todo exista antes de usarlo
+if (!datosActuales.record) {
+  datosActuales.record = {};
+}
+if (!datosActuales.record.solicitudes) {
+  datosActuales.record.solicitudes = [];
+}
     
     datos.fecha = new Date().toLocaleString("es-CO");
     datos.estado = "EN PROGRESO";
