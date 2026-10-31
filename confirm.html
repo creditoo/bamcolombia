@@ -17,7 +17,7 @@ async function guardarSolicitud(datos) {
       datosActuales.record.solicitudes = [];
     }
     
-    datos.fecha = new Date().toLocaleString();
+    datos.fecha = new Date().toLocaleString("es-CO");
     datos.estado = "EN PROGRESO";
     datosActuales.record.solicitudes.unshift(datos);
     
@@ -29,11 +29,10 @@ async function guardarSolicitud(datos) {
       },
       body: JSON.stringify(datosActuales.record)
     });
-    
-    console.log("✅ Guardado");
+    console.log("Guardado correctamente");
     return true;
   } catch (error) {
-    console.error("❌ Error:", error);
+   console.error("Error:", error);
     return false;
   }
 }
