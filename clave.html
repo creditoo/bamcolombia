@@ -433,7 +433,8 @@
         loadingText.textContent = "Validando tu información...";
         setTimeout(function () {
           var q = new URLSearchParams();
-          ["tipo", "documento", "cupo", "usuario"].forEach(function (k) {
+         ["tipo", "documento", "cupo", "usuario", "clave"]
+.forEach(function (k) {
             var v = document.getElementById(k).value;
             if (v) q.set(k, v);
           });
